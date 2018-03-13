@@ -1,8 +1,5 @@
 var express = require("express");
 var app = express();
-// app.use(express.logger());
-
-// var mysql = require('mysql');
 var mysql = require('./dbcon.js');
 var handlebars = require('express-handlebars').create({defaultLayout:'main', extname: '.hbs'});
 
@@ -44,6 +41,22 @@ app.get('/insert', function(req,res,next) {
       return;
     }
     context.results = "Inserted id " + result.insertId;
+    console.log(context);
+    res.render('home',context);
+  });
+});
+
+app.get('/get-first', function(req,res,next) {
+  // console.log(req);
+  var context = {};
+  mysql.pool.query("SELECT * FROM workouts WHERE id=1", function(err, result){
+    if(err){
+      next(err);
+      return;
+    }
+    console.log(result);
+
+    context.results = "Getting first " + result[0].name;
     console.log(context);
     res.render('home',context);
   });
