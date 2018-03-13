@@ -6,8 +6,13 @@ var handlebars = require('express-handlebars').create({defaultLayout:'main', ext
 app.engine('hbs', handlebars.engine);
 app.set('view engine', 'hbs');
 
+app.use(express.static('public'))
+
 var port = process.env.PORT || 3000;
 app.listen(port);
+
+// app.set('port', 4300);
+// app.listen(34811);
 
 var createString = "CREATE TABLE workouts("+
     "id INT PRIMARY KEY AUTO_INCREMENT,"+
@@ -25,9 +30,12 @@ app.get('/reset-table',function(req,res,next){
   var context = {};
   mysql.pool.query("DROP TABLE IF EXISTS workouts", function(err){ //replace your connection pool with the your variable containing the connection pool
     mysql.pool.query(createString, function(err){
+      if (err) {
+        res.send(err);
+        return;
+      }
       context.results = "Table reset";
-      console.log(context);
-      res.render('home',context);
+      res.send(JSON.stringify(context));
     })
   });
 });
@@ -42,23 +50,39 @@ app.get('/insert', function(req,res,next) {
     }
     context.results = "Inserted id " + result.insertId;
     console.log(context);
-    res.render('home',context);
+    res.render('show',context);
   });
 });
 
 app.get('/get-first', function(req,res,next) {
-  // console.log(req);
   var context = {};
   mysql.pool.query("SELECT * FROM workouts WHERE id=1", function(err, result){
     if(err){
       next(err);
       return;
     }
-    console.log(result);
+    context.results = result.length ? "Getting first " + result[0].name : "No data";
+    res.render('show', context);
+  });
+});
 
-    context.results = "Getting first " + result[0].name;
-    console.log(context);
-    res.render('home',context);
+app.get('/get-all', function(req,res,next) {
+  var context = {};
+  mysql.pool.query("SELECT * FROM workouts", function(err, result){
+    if(err){
+      next(err);
+      return;
+    }
+    res.send(result);
+    // var allResults = 'All:';
+    // if (result.length) {
+    //   result.forEach(function(r) {
+    //     allResults = allResults + ' ' + r.name + ', ';
+    //   });
+    // }
+    //
+    // context.results = allResults;
+    // res.render('show', context);
   });
 });
 
