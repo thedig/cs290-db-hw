@@ -1,6 +1,10 @@
 (function(global, doc) {
+  var localPath = global.location.href
+                  .replace('http://', '')
+                  .replace('https://', '')
+                  .replace(global.location.host, '');
   doc.addEventListener("DOMContentLoaded", function(event) {
-    getAll();
+    if (localPath === '/') { getAll(); }
     var resetEl = document.getElementsByClassName('reset-button')[0];
     if (resetEl) {
       resetEl.addEventListener('click', resetTable);
