@@ -1,10 +1,4 @@
-
 (function(global, doc) {
-  // var localPath = window.location.href
-  //                   .replace('http://', '')
-  //                   .replace('https://', '')
-  //                   .replace(window.location.host, '');
-
   doc.addEventListener("DOMContentLoaded", function(event) {
     getAll();
     var resetEl = document.getElementsByClassName('reset-button')[0];
@@ -20,7 +14,6 @@
 })(window, document);
 
 function getAll() {
-  console.log('getting all');
   var uri = '/get-all';
   var req = new XMLHttpRequest();
   req.open('GET', uri, true);
@@ -32,11 +25,31 @@ function getAll() {
     var statuscode = +parseInt(JSON.parse(this.status));
     if (statuscode >= 200 && statuscode < 400) {
       updateStatus('Get all Success');
+      populateWorkoutRows(response);
     } else {
       updateStatus(this.statusText);
       console.log("Error in network request: " + this.statusText);
     }
   }
+}
+
+function populateWorkoutRows(response) {
+  var tableEl = document.getElementsByClassName('db-rows')[0];
+  response.forEach(function(w) {
+    var rowEl = document.createElement('tr');
+    ['id', 'name', 'reps', 'weight'].forEach(function(key) {
+      var keyEl = document.createElement('td');
+      if (key === 'weight' && w[key]) {
+        var unit = w['lb'] ? 'lb.' : 'kg';
+        keyEl.innerHTML = w[key] + ' ' + unit;
+      } else {
+        keyEl.innerHTML = w[key];
+      }
+      rowEl.appendChild(keyEl);
+    });
+
+    tableEl.appendChild(rowEl);
+  });
 }
 
 function resetTable() {
@@ -60,5 +73,5 @@ function resetTable() {
 
 function updateStatus(status) {
   var statusEl = document.getElementsByClassName('transaction-status')[0];
-  statusEl.innerHTML = status;
+  if (statusEl) { statusEl.innerHTML = status; }
 }

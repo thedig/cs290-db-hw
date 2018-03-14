@@ -41,17 +41,16 @@ app.get('/reset-table',function(req,res,next){
 });
 
 app.get('/insert', function(req,res,next) {
-  console.log(req);
   var context = {};
-  mysql.pool.query("INSERT INTO workouts (`name`) VALUES (?)", [req.query.c], function(err, result){
-    if(err){
-      next(err);
-      return;
-    }
-    context.results = "Inserted id " + result.insertId;
-    console.log(context);
-    res.render('show',context);
-  });
+  mysql.pool.query("INSERT INTO workouts (`name`, `reps`, `weight`) VALUES (?, ?, ?)",
+    [req.query.name, req.query.reps, req.query.weight], function(err, result){
+      if(err){
+        next(err);
+        return;
+      }
+      context.results = "Inserted id " + result.insertId;
+      res.send(context);
+    });
 });
 
 app.get('/get-first', function(req,res,next) {
@@ -74,15 +73,6 @@ app.get('/get-all', function(req,res,next) {
       return;
     }
     res.send(result);
-    // var allResults = 'All:';
-    // if (result.length) {
-    //   result.forEach(function(r) {
-    //     allResults = allResults + ' ' + r.name + ', ';
-    //   });
-    // }
-    //
-    // context.results = allResults;
-    // res.render('show', context);
   });
 });
 
