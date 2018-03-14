@@ -2,6 +2,10 @@ var express = require("express");
 var app = express();
 var mysql = require('./dbcon.js');
 var handlebars = require('express-handlebars').create({defaultLayout:'main', extname: '.hbs'});
+var bodyParser = require('body-parser');
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.engine('hbs', handlebars.engine);
 app.set('view engine', 'hbs');
@@ -40,15 +44,18 @@ app.get('/reset-table',function(req,res,next){
   });
 });
 
-app.get('/insert', function(req,res,next) {
+app.post('/insert', function(req,res,next) {
   var context = {};
+  console.log('insert:', req.body);
+  // res.send(JSON.stringify(req.body));
   mysql.pool.query("INSERT INTO workouts (`name`, `reps`, `weight`) VALUES (?, ?, ?)",
-    [req.query.name, req.query.reps, req.query.weight], function(err, result){
+    [req.body.name, req.body.reps, req.body.weight], function(err, result){
       if(err){
         next(err);
         return;
       }
       context.results = "Inserted id " + result.insertId;
+      console.log(context);
       res.send(context);
     });
 });

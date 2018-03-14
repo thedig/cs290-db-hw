@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/thedig/cs290-db-hw#readme",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.16.3",
     "express-handlebars": "^3.0.0",
     "mysql": "^2.15.0"
