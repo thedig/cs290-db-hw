@@ -1,19 +1,12 @@
-<div>
-  <button class="reset-button">Reset Table</button>
-</div>
-<div>
-  <button class="get-all-button">Get All Workouts</button>
-</div>
-
-<form id="insertForm">
+<form id="editForm">
 	<label for="name">Name: </label>
 	<input type="text" name="name" id="workoutName">
   <label for="reps">Reps: </label>
   <input type="text" name="reps" id="workoutReps">
   <label for="weight">Weight: </label>
   <input type="text" name="weight" id="workoutWeight">
-  <label for="date">Date: </label>
-  <input type="date" name="date" id="workoutDate">
+	<label for="date">Date: </label>
+	<input type="date" name="date" id="workoutDate">
 
   <h4>Weight type</h4>
   <input type="radio" name="type" value="lb" id="lbType">
@@ -21,15 +14,5 @@
   <input type="radio" name="type" value="kg" id="kgType">
   <label for="kgType">kg</label>
 
-  <input type="submit" id="insertWorkout">
+  <input type="submit" id="updateWorkout">
 </form>
-
-<table class="db-rows">
-  <tr>
-    <th>name</th>
-    <th>reps</th>
-    <th>weight</th>
-    <th>date</th>
-  </tr>
-
-</table>
