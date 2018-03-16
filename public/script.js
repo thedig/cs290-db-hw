@@ -19,7 +19,7 @@
 })(window, document);
 
 function setupEditWorkout(id) {
-  getWorkout(id);
+  getWorkoutToEdit(id);
 
   document.getElementById('updateWorkout').addEventListener('click', function(event){
     var payload = {};
@@ -46,7 +46,7 @@ function setupEditWorkout(id) {
   });
 }
 
-function getWorkout(id) {
+function getWorkoutToEdit(id) {
   var uri = '/get?id=' + id;
   var req = new XMLHttpRequest();
   req.open('GET', uri, true);
@@ -65,6 +65,11 @@ function getWorkout(id) {
         document.getElementById('workoutReps').value = workout.reps;
         document.getElementById('workoutWeight').value = workout.weight;
         document.getElementById('workoutDate').value = workout.date.substr(0, 10);
+        if (workout.lbs === 1) {
+          document.getElementById('lbType').checked = true;
+        } else {
+          document.getElementById('kgType').checked = true;
+        }
       }
       updateStatus("Got workout");
     } else {

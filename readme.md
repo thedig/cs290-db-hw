@@ -6,7 +6,8 @@ Front-end only changes:
 
 Node changes:
  - Copy changes to flip
- - edit app.js to listen to hard-coded port #
+ - edit app.js to listen to hard-coded port # (or use arg?)
+ - npm install
  - call ./node_modules/forever/bin/forever start app.js [same-port-#]
 
 Remaining reqs:

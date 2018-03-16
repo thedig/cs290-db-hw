@@ -127,7 +127,6 @@ app.put('/update',function(req,res,next){
         ],
         function(err, result){
         if(err){
-          console.log('error');
           next(err);
           return;
         }
