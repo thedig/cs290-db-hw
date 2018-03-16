@@ -20,7 +20,7 @@
       });
     }
 
-    bindPost();
+    setupAddWorkout();
   });
 
 })(window, document);
@@ -36,7 +36,6 @@ function getAll() {
     var response = JSON.parse(this.responseText);
     var statuscode = +parseInt(JSON.parse(this.status));
     if (statuscode >= 200 && statuscode < 400) {
-      updateStatus('Get all Success');
       populateWorkoutRows(response);
     } else {
       updateStatus(this.statusText);
@@ -45,16 +44,16 @@ function getAll() {
   }
 }
 
-function bindPost(){
-
+function setupAddWorkout(){
   document.getElementById('insertWorkout').addEventListener('click', function(event){
-
+    var weightType = document.querySelector('input[name = "type"]:checked').value;
+    var lbType = (weightType === 'lb');
     var payload = {
       name: document.getElementById('workoutName').value,
       reps: document.getElementById('workoutReps').value,
-      weight: document.getElementById('workoutWeight').value
+      weight: document.getElementById('workoutWeight').value,
+      lbs: lbType
     };
-
     var uri = '/insert';
     var req = new XMLHttpRequest();
     req.open('POST', uri, true);
@@ -85,24 +84,23 @@ function refreshTable() {
 }
 
 function clearAllRows() {
-  // var tableEl = document.getElementsByClassName('db-rows')[0];
   var rows = document.getElementsByClassName('entry-row');
   var len = rows.length;
   for (var i = len-1; i >= 0; --i) {
     rows[i].remove();
   }
-  // debugger;
 }
 
 function populateWorkoutRows(response) {
   var tableEl = document.getElementsByClassName('db-rows')[0];
   response.forEach(function(w) {
+    console.log(w);
     var rowEl = document.createElement('tr');
     rowEl.className = "entry-row";
     ['id', 'name', 'reps', 'weight'].forEach(function(key) {
       var keyEl = document.createElement('td');
       if (key === 'weight' && w[key]) {
-        var unit = w['lb'] ? 'lb.' : 'kg';
+        var unit = (w['lbs'] === 1) ? 'lb.' : 'kg';
         keyEl.innerHTML = w[key] + ' ' + unit;
       } else {
         keyEl.innerHTML = w[key];

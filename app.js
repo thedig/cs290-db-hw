@@ -12,7 +12,7 @@ app.set('view engine', 'hbs');
 
 app.use(express.static('public'))
 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || process.argv[2] || 3000;
 app.listen(port);
 
 // app.set('port', 4300);
@@ -47,10 +47,12 @@ app.get('/reset-table',function(req,res,next){
 app.post('/insert', function(req,res,next) {
   var context = {};
   console.log('insert:', req.body);
+  console.log(req.body.lb)
   // res.send(JSON.stringify(req.body));
-  mysql.pool.query("INSERT INTO workouts (`name`, `reps`, `weight`) VALUES (?, ?, ?)",
-    [req.body.name, req.body.reps, req.body.weight], function(err, result){
+  mysql.pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `lbs`) VALUES (?, ?, ?, ?)",
+    [req.body.name, req.body.reps, req.body.weight, req.body.lbs], function(err, result){
       if(err){
+        console.log('error');
         next(err);
         return;
       }
@@ -63,7 +65,7 @@ app.post('/insert', function(req,res,next) {
 app.get('/get-first', function(req,res,next) {
   var context = {};
   mysql.pool.query("SELECT * FROM workouts WHERE id=1", function(err, result){
-    if(err){
+    if (err){
       next(err);
       return;
     }
@@ -80,6 +82,29 @@ app.get('/get-all', function(req,res,next) {
       return;
     }
     res.send(result);
+  });
+});
+
+app.get('/update',function(req,res,next){
+  var context = {};
+  mysql.pool.query("SELECT * FROM workouts WHERE id=?", [req.body.id], function(err, result){
+    if (err){
+      next(err);
+      return;
+    }
+    if(result.length == 1){
+      var curVals = result[0];
+      mysql.pool.query("UPDATE todo SET name=?, done=?, due=? WHERE id=? ",
+        [req.body.name || curVals.name, req.body.done || curVals.done, req.body.due || curVals.due, req.body.id],
+        function(err, result){
+        if(err){
+          next(err);
+          return;
+        }
+        context.results = "Updated " + result.changedRows + " rows.";
+        res.render('home',context);
+      });
+    }
   });
 });
 

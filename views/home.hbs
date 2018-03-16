@@ -12,10 +12,16 @@
 <form id="insertForm">
 	<label for="name">Name: </label>
 	<input type="text" name="name" id="workoutName">
-  <label for="name">Reps: </label>
+  <label for="reps">Reps: </label>
   <input type="text" name="reps" id="workoutReps">
-  <label for="name">Weight: </label>
+  <label for="weight">Weight: </label>
   <input type="text" name="weight" id="workoutWeight">
+
+  <h4>Weight type</h4>
+  <input type="radio" name="type" value="lb" id="lbType">
+  <label for="lbType">lb.</label>
+  <input type="radio" name="type" value="kg" id="kgType">
+  <label for="kgType">kg</label>
 
   <input type="submit" id="insertWorkout">
 </form>
