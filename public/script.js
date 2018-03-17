@@ -213,6 +213,7 @@ function deleteWorkout(id) {
 
   function handleDeleteResponse() {
     refreshTable();
+    updateStatus('deleted: ' + id);
   }
 
 }
@@ -236,7 +237,7 @@ function appendEntryFields(rowEl, w) {
     if (key === 'weight' && w[key]) {
       var unit = (w['lbs'] === 1) ? 'lb.' : 'kg';
       keyEl.innerHTML = w[key] + ' ' + unit;
-    } if (key === 'date' && w[key]) {
+    } else if (key === 'date' && w[key]) {
       keyEl.innerHTML = w[key].substr(0, 10);
     } else {
       keyEl.innerHTML = w[key];
