@@ -50,8 +50,12 @@ app.get('/get-first', function(req,res,next) {
 
 app.post('/insert', function(req,res,next) {
   var context = {};
+  var bodyValLbs = false;
+  if (req.body.lbs === 'true') {
+    bodyValLbs = true;
+  }
   mysql.pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `lbs`, `date`) VALUES (?, ?, ?, ?, ?)",
-    [req.body.name, req.body.reps, req.body.weight, req.body.lbs, req.body.date], function(err, result){
+    [req.body.name, req.body.reps, req.body.weight, bodyValLbs, req.body.date], function(err, result){
       if(err){
         next(err);
         return;
@@ -117,12 +121,21 @@ app.put('/update',function(req,res,next){
     }
     if(result.length == 1){
       var curVals = result[0];
-      mysql.pool.query("UPDATE workouts SET name=?, reps=?, weight=?, lbs=? WHERE id=? ",
+      var bodyValLbs = 0;
+      if (req.body.lbs === 'true') {
+        bodyValLbs = true;
+      } else if (req.body.lbs === 'false') {
+        bodyValLbs = false;
+      } else {
+        bodyValLbs = curVals.lbs;
+      }
+
+      mysql.pool.query("UPDATE workouts SET name=?, reps=?, weight=?, date=?, lbs=? WHERE id=? ",
         [ req.body.name || curVals.name,
           req.body.reps || curVals.reps,
           req.body.weight || curVals.weight,
           req.body.date || curVals.date,
-          req.body.lbs || curVals.lbs,
+          bodyValLbs,
           req.body.id
         ],
         function(err, result){

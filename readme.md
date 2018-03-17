@@ -15,3 +15,9 @@ Remaining reqs:
  - delete row
  - edit row (can be separate route)
  - need to use use hidden fields for edit/delete?
+
+
+Remaining:
+ - edit type not sticking?
+ - remove "get all" button, no need
+ - styles

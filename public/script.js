@@ -25,7 +25,7 @@ function setupEditWorkout(id) {
     var payload = {};
 
     var weightType = document.querySelector('input[name = "type"]:checked').value;
-    var lbType = (weightType === 'lb');
+    var lbType = (weightType === 'lb') ? 'true' : 'false';
     var payload = {
       id: id,
       name: document.getElementById('workoutName').value,
@@ -65,7 +65,7 @@ function getWorkoutToEdit(id) {
         document.getElementById('workoutReps').value = workout.reps;
         document.getElementById('workoutWeight').value = workout.weight;
         document.getElementById('workoutDate').value = workout.date.substr(0, 10);
-        if (workout.lbs === 1) {
+        if (workout.lbs >= 1) {
           document.getElementById('lbType').checked = true;
         } else {
           document.getElementById('kgType').checked = true;
@@ -132,7 +132,7 @@ function getAll() {
 function setupAddWorkout(){
   document.getElementById('insertWorkout').addEventListener('click', function(event){
     var weightType = document.querySelector('input[name = "type"]:checked').value;
-    var lbType = (weightType === 'lb');
+    var lbType = (weightType === 'lb') ? 'true' : 'false';
     var payload = {
       name: document.getElementById('workoutName').value,
       reps: document.getElementById('workoutReps').value,
