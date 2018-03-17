@@ -101,13 +101,6 @@ function setupHomeButtons() {
       clearAllRows();
     });
   }
-  var getAllEl = document.getElementsByClassName('get-all-button')[0];
-  if (getAllEl) {
-    getAllEl.addEventListener('click', function() {
-      clearAllRows();
-      getAll();
-    });
-  }
 }
 
 function getAll() {
